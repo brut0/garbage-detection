@@ -1,0 +1,62 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/dev:/etc/nginx/templates
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    env_file:
+      - .env
+    ports:
+      - 3000:80
+    links:
+      - frontend
+      - backend
+    depends_on:
+      - frontend
+      - backend
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    env_file:
+      - .env
+    volumes:
+      - pgdata-dev:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: ./Dockerfile-dev
+    volumes: 
+      - ./backend:/src
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    env_file:
+      - .env
+    command: uvicorn --factory app:get_app --port 8000 --host 0.0.0.0
+    restart: always
+    links:
+      - postgres
+    depends_on:
+      - postgres
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile-dev
+    volumes: 
+      - ./frontend:/src
+    command: npm start
+    depends_on:
+      - backend
+
+volumes:
+  pgdata-dev:
