@@ -2,6 +2,10 @@ server {
   listen             ${NGINX_PORT};
   server_name        ${NGINX_HOST};
 
+  location /photos {
+    root             /usr/share/nginx/html;
+  }
+
   location /api {
     proxy_pass       http://backend:8000;
   }

@@ -1,4 +1,5 @@
 from .router import router
-from . import littered_points
-from . import add_garbage_info
+from . import get_cameras
 from . import fill_dummy_data
+from . import add_garbage_info
+from . import register_camera
