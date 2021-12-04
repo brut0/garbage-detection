@@ -18,9 +18,9 @@ http://3.17.12.94/dashboard/
    docker-compose pull  
    docker-compose build  
    docker-compose up -d  
-после чего на http://localhost:3000/dashboard/ будет доступен сервис по определению заполненности мусорных контейнеров в реальном времени.
+после чего на http://localhost:3000/dashboard/ откроется страница по определению заполненности мусорных контейнеров в реальном времени.
 5. в папке 'backend\Tester' выполнить python tester.py;
-6. для обработки изображений нужно в папке 'ml' выполнить python main.py (предобученные модели https://drive.google.com/drive/folders/1g4ZJm_-37nIbu5IJfG24H_bxpLK0bJoH?usp=sharing предворительно нужно так же поместить в папку 'ml'). Изображения нужно помещать в папку 'ml/image_source'.
+6. для обработки изображений нужно в папке 'ml' выполнить python main.py (предобученные модели https://drive.google.com/drive/folders/1g4ZJm_-37nIbu5IJfG24H_bxpLK0bJoH?usp=sharing предварительно нужно так же поместить в папку 'ml'). Изображения нужно помещать в папку 'ml/image_source'.
 
 
 ### Содержимое репозитория
