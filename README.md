@@ -32,7 +32,8 @@ http://3.17.12.94/dashboard/
 	- ml/
 	- nginx/
 - R&D:
-	- model_faster-rcnn
-	- notebooks
+	- model_faster-rcnn/
+	- notebooks/
+- presentation.pdf
 
 ### Решение команды NoName
