@@ -4,7 +4,7 @@
 Инструкция по развёртыванью и запуску решения
 
 1. установить docker и docker-compose;
-2. в папке 'ml' выполнить pip install requirements.txt;
+2. в папке 'ml' выполнить pip install -r requirements.txt;
 3. в папке с решением выполнить следующие команды:  
    docker-compose pull  
    docker-compose build  
