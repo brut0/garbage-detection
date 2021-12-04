@@ -22,6 +22,7 @@
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": 1,
+    "iteration": 1638576069420,
     "links": [],
     "liveNow": false,
     "panels": [
@@ -74,11 +75,36 @@
               ]
             }
           },
-          "overrides": []
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "filled_containers_count"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
-          "h": 9,
-          "w": 12,
+          "h": 11,
+          "w": 10,
           "x": 0,
           "y": 0
         },
@@ -100,22 +126,42 @@
               "uid": "PA942B37CCFAF5A81"
             },
             "format": "time_series",
-            "group": [],
+            "group": [
+              {
+                "params": [
+                  "1d",
+                  "none"
+                ],
+                "type": "time"
+              }
+            ],
             "metricColumn": "none",
             "rawQuery": false,
-            "rawSql": "SELECT\n  created_at AS \"time\",\n  lat\nFROM camera\nWHERE\n  $__timeFilter(created_at)\nORDER BY 1",
+            "rawSql": "SELECT\n  $__timeGroupAlias(created_at,1d),\n  avg(filled_containers_count) AS \"filled_containers_count\"\nFROM garbage_log\nWHERE\n  $__timeFilter(created_at) AND\n  camera_id = $camera_id\nGROUP BY 1\nORDER BY 1",
             "refId": "A",
             "select": [
               [
                 {
                   "params": [
-                    "lat"
+                    "filled_containers_count"
                   ],
                   "type": "column"
+                },
+                {
+                  "params": [
+                    "avg"
+                  ],
+                  "type": "aggregate"
+                },
+                {
+                  "params": [
+                    "filled_containers_count"
+                  ],
+                  "type": "alias"
                 }
               ]
             ],
-            "table": "camera",
+            "table": "garbage_log",
             "timeColumn": "created_at",
             "timeColumnType": "timestamp",
             "where": [
@@ -123,28 +169,152 @@
                 "name": "$__timeFilter",
                 "params": [],
                 "type": "macro"
+              },
+              {
+                "datatype": "int4",
+                "name": "",
+                "params": [
+                  "camera_id",
+                  "=",
+                  "$camera_id"
+                ],
+                "type": "expression"
               }
             ]
           }
         ],
-        "title": "Panel Title",
+        "title": "Количество заполненых баков по дням",
         "type": "timeseries"
+      },
+      {
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 5,
+          "x": 19,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "postgres",
+              "uid": "PA942B37CCFAF5A81"
+            },
+            "format": "time_series",
+            "group": [],
+            "metricColumn": "none",
+            "rawQuery": false,
+            "rawSql": "SELECT\n  created_at AS \"time\",\n  total_containers_count\nFROM garbage_log\nWHERE\n  $__timeFilter(created_at) AND\n  camera_id = $camera_id\nORDER BY 1",
+            "refId": "A",
+            "select": [
+              [
+                {
+                  "params": [
+                    "total_containers_count"
+                  ],
+                  "type": "column"
+                }
+              ]
+            ],
+            "table": "garbage_log",
+            "timeColumn": "created_at",
+            "timeColumnType": "timestamp",
+            "where": [
+              {
+                "name": "$__timeFilter",
+                "params": [],
+                "type": "macro"
+              },
+              {
+                "datatype": "int4",
+                "name": "",
+                "params": [
+                  "camera_id",
+                  "=",
+                  "$camera_id"
+                ],
+                "type": "expression"
+              }
+            ]
+          }
+        ],
+        "title": "Общее количество баков",
+        "type": "stat"
       }
     ],
+    "refresh": false,
     "schemaVersion": 33,
     "style": "dark",
     "tags": [],
     "templating": {
-      "list": []
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "4",
+            "value": "4"
+          },
+          "hide": 0,
+          "label": "Номер камеры",
+          "name": "camera_id",
+          "options": [
+            {
+              "selected": true,
+              "text": "4",
+              "value": "4"
+            }
+          ],
+          "query": "4",
+          "skipUrlSync": false,
+          "type": "textbox"
+        }
+      ]
     },
     "time": {
-      "from": "now-6h",
-      "to": "now"
+      "from": "2021-11-21T06:02:21.293Z",
+      "to": "2021-12-02T07:38:56.415Z"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Статистика по камерам",
     "uid": "8Za-3m27k",
-    "version": 1,
+    "version": 3,
     "weekStart": ""
   }

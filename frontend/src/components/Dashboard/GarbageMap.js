@@ -1,19 +1,18 @@
 import React from "react";
 import { Map, YMaps, ObjectManager } from "react-yandex-maps";
-import { useQuery } from "react-query";
-import { fetchLitteredPoints } from "../../api";
+import { observer } from 'mobx-react-lite'
+import useStore from "../../store"; 
+
 
 const GarbageMap = () => {
-  const { data } = useQuery("littered-points", fetchLitteredPoints, {
-    refetchInterval: 15000
-  });
+  const store = useStore()
 
   return (
     <YMaps>
       <Map
-        defaultState={{
-          center: [55.786778667350575, 49.12538845509848],
-          zoom: 12,
+        state={{
+          center: [store.map.center_lat, store.map.center_alt],
+          zoom: store.map.zoom
         }}
         width="100%"
         height="100%"
@@ -29,13 +28,13 @@ const GarbageMap = () => {
           }}
           clusters={{
           }}
-          features={data?.map((camera) => ({
+          features={store.cameras.map((camera) => ({
             type: "Feature",
             id: camera.id,
             geometry: { type: "Point", coordinates: camera.location },
             properties: {
               hintContent: `Заполненные баки: ${camera.filledContainers}`,
-              balloonContentBody: camera?.photo && `<img src='${camera.photo}' width='400px'></img>`,
+              balloonContentBody: camera?.photo && `<img src='${camera.photo}' width='300px'></img>`,
             },
             options: {
               preset: 'islands#circleDotIcon',
@@ -52,4 +51,4 @@ const GarbageMap = () => {
   );
 };
 
-export default GarbageMap;
+export default observer(GarbageMap);

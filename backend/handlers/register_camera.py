@@ -19,6 +19,6 @@ async def handler(payload: CameraPayload):
         camera = Camera(id=payload.id, address=payload.address, 
                         lat=payload.lat, alt=payload.alt)
         db_session.add(camera)
-        db_session.commit()
+        await db_session.commit()
 
     return payload

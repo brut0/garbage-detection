@@ -8,14 +8,15 @@ from .router import router
 
 
 def serialize_camera(point: Tuple[Camera, int, int]):
-    camera, total_containers, filled_containers = point
+    camera, total_containers, filled_containers, containers_data = point
     photo = urljoin('/cameras', camera.photo_path) if camera.photo_path else None
     return {'id': camera.id,
             'address': camera.address, 
             'photo': photo,
             'location': [camera.lat, camera.alt], 
             'totalContainers': total_containers, 
-            'filledContainers': filled_containers}
+            'filledContainers': filled_containers, 
+            'containers': containers_data}
 
 
 @router.get('/cameras')

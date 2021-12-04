@@ -1,27 +1,5 @@
 version: "3"
 services:
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx:/etc/nginx/templates
-      - frontend-build:/usr/share/nginx/html
-      - photos:/usr/share/nginx/html/photos
-      - ./hitmap:/usr/share/nginx/html/hitmap
-    environment:
-      - NGINX_PORT=3000
-    env_file:
-      - .env
-    ports:
-      - 3000:3000
-    links:
-      - frontend
-      - backend
-      - grafana
-    depends_on:
-      - backend
-      - frontend
-      - grafana
-      
   postgres:
     image: postgres:alpine
     environment:
@@ -43,6 +21,8 @@ services:
       - .env
     command: uvicorn --factory app:get_app --port 8000 --host 0.0.0.0
     restart: always
+    ports:
+      - 8000:8000
     volumes: 
       - photos:/src/photos
     links:
@@ -50,15 +30,10 @@ services:
     depends_on:
       - postgres
 
-  frontend:
-    build: ./frontend
-    volumes:
-      - frontend-build:/src/build
-    depends_on:
-      - backend
-
   grafana:
     build: ./grafana
+    ports:
+      - 9000:3000
     volumes:
       - grafana-data:/var/lib/grafana
 

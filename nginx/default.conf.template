@@ -7,6 +7,11 @@ server {
   listen      ${NGINX_PORT};
   server_name ${NGINX_HOST};
 
+  location /hitmap {
+    index kmap.html;
+    root /usr/share/nginx/html;
+  }
+
   location /photos {
     root /usr/share/nginx/html;
   }

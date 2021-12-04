@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components';
-import { Title } from './components/shared';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
+import { Button, PageHeader } from 'antd';
+import { observer } from 'mobx-react-lite';
 
 const Layout = styled.div`
   with: 100%;
@@ -19,16 +20,6 @@ const Layout = styled.div`
   grid-template-columns: auto;
 `;
 
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 1em;
-  background-color: rgb(129, 223, 229);
-  color: white;
-`;
-
 const Content = styled.div`
   width: 100%;
   height: 100%;
@@ -40,20 +31,23 @@ const Footer = styled.footer`
   with: 100%;
   height: 100%;
   padding: 1em;
-  background-color: rgb(129, 223, 229);
-  color: white;
+  color: black;
 `;
 
 const App = () => {
   return (
     <Layout>
-      <Header>
-        <Title>Garbage detector</Title>
-      </Header>
+      <PageHeader 
+        title='Garbage detector'
+        extra={[
+          <Button href='/grafana'>Grafana</Button>,
+          <Button href='/hitmap'>Тепловая карта</Button>
+        ]}
+      />
       <Content>
         <Routes>
           <Route path='dashboard/' element={<Dashboard />} />
-          <Route path='/' element={<Navigate to='dashboard/' />} />
+          <Route path='*' element={<Navigate to='dashboard/' />} />
         </Routes>
       </Content>
       <Footer>Powered by NoName team.</Footer>
@@ -61,4 +55,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default observer(App);
